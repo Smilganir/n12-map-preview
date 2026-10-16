@@ -4,7 +4,7 @@
 const route=u=>{try{const p=new URL(u,location.href).pathname;if(p==='/mako/elections2026/story.json')return new URL('story.json',location.href).href;if(p==='/mako/metadata.json')return new URL('metadata.json',location.href).href}catch{}return u};
 const open=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u,...a){return open.call(this,m,route(u),...a)};
 const fetch0=window.fetch;window.fetch=function(u,o){return fetch0.call(this,route(typeof u==='string'?u:u.url),o)};
-})();</script><script defer src="../diagnostic.js"></script><meta name="robots" content="noindex,nofollow">
+})();</script><meta name="robots" content="noindex,nofollow">
 <script>
 window.STORIES_DOMAIN="storycards.co";
 window.STORY_BASE_PATH="mako/elections2026";
