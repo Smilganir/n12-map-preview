@@ -3,6 +3,7 @@
 const key='n12-isolation-events-v1',id=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);let events=[];try{events=JSON.parse(localStorage.getItem(key)||'[]')}catch{}
 function log(type,data={}){const e={time:new Date().toISOString(),id,kind:window===top?'parent':'frame',mode,type,...data};try{events=JSON.parse(localStorage.getItem(key)||'[]');events.push(e);localStorage.setItem(key,JSON.stringify(events.slice(-140)))}catch{}console.log('N12_ISOLATION',JSON.stringify(e));}
 window.__isolationLog=log;log('boot',{navigation:performance.getEntriesByType('navigation')[0]?.type,previous:events.slice(-4)});
+if(window!==top){for(const st of [localStorage,sessionStorage])for(let i=st.length-1;i>=0;i--){const k=st.key(i);if(k.startsWith('n12-ladder:v1:'))st.removeItem(k)}log('clean-breaker-start-for-comparison')}
 if(window!==top&&mode==='lite'){Object.defineProperty(window,'__N12_MODE__',{configurable:true,get:()=> 'lite',set:()=>{}});log('forced-lite-preview-only')}
 for(const n of ['pagehide','pageshow','beforeunload','unload','visibilitychange','freeze','resume'])addEventListener(n,e=>log(n,{visibility:document.visibilityState,persisted:e.persisted}));
 addEventListener('error',e=>log('error',{message:e.message,source:e.filename,line:e.lineno}));addEventListener('unhandledrejection',e=>log('rejection',{message:String(e.reason)}));
