@@ -1,0 +1,13 @@
+/* Preview-only lifecycle evidence. Never included in production artifact. */
+(()=>{const q=new URLSearchParams(location.search),mode=q.get('isolation');if(!mode)return;
+const key='n12-isolation-events-v1',id=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);let events=[];try{events=JSON.parse(localStorage.getItem(key)||'[]')}catch{}
+function log(type,data={}){const e={time:new Date().toISOString(),id,kind:window===top?'parent':'frame',mode,type,...data};try{events=JSON.parse(localStorage.getItem(key)||'[]');events.push(e);localStorage.setItem(key,JSON.stringify(events.slice(-140)))}catch{}console.log('N12_ISOLATION',JSON.stringify(e));}
+window.__isolationLog=log;log('boot',{navigation:performance.getEntriesByType('navigation')[0]?.type,previous:events.slice(-4)});
+if(window!==top&&mode==='lite'){Object.defineProperty(window,'__N12_MODE__',{configurable:true,get:()=> 'lite',set:()=>{}});log('forced-lite-preview-only')}
+for(const n of ['pagehide','pageshow','beforeunload','unload','visibilitychange','freeze','resume'])addEventListener(n,e=>log(n,{visibility:document.visibilityState,persisted:e.persisted}));
+addEventListener('error',e=>log('error',{message:e.message,source:e.filename,line:e.lineno}));addEventListener('unhandledrejection',e=>log('rejection',{message:String(e.reason)}));
+document.addEventListener('click',e=>{const b=e.target.closest?.('button,a');if(b)log('click',{text:b.textContent.slice(0,70),href:b.getAttribute('href')})},true);
+document.addEventListener('webglcontextlost',e=>log('webglcontextlost'),true);
+if(window===top){const box=document.createElement('aside');box.style.cssText='position:fixed;z-index:2147483647;top:0;left:0;right:0;background:#fff4aa;color:#111;font:11px monospace;padding:3px;max-height:65px;overflow:auto';function render(){if(!box.isConnected)document.body?.append(box);let a=[];try{a=JSON.parse(localStorage.getItem(key)||'[]')}catch{}box.textContent='ISOLATION '+mode+' (not publisher) | '+a.slice(-3).map(e=>e.kind+':'+e.type).join(' | ')}setInterval(render,1000);render();}
+else{let last='';setInterval(()=>{const b=window.__N12_BREAKER__,build=window.__BUILD;const state=JSON.stringify({breaker:b,build,marks:performance.getEntriesByType('mark').map(x=>x.name),resources:performance.getEntriesByType('resource').filter(x=>/stat_areas|kalpi|index-/.test(x.name)).map(x=>({name:x.name.split('/').pop(),bytes:x.transferSize}))});if(state!==last){last=state;log('state',JSON.parse(state))}},1000)}
+})();
