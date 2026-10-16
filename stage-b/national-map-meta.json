@@ -45,7 +45,7 @@
       "height": 1800,
       "cssWidth": 1440,
       "cssHeight": 900,
-      "bytes": 415264
+      "bytes": 386019
     },
     {
       "name": "embed-phone",
@@ -65,7 +65,7 @@
       "height": 932,
       "cssWidth": 1074,
       "cssHeight": 466,
-      "bytes": 173698
+      "bytes": 173694
     },
     {
       "name": "phone320",
@@ -105,7 +105,7 @@
       "height": 1800,
       "cssWidth": 1440,
       "cssHeight": 900,
-      "bytes": 435226
+      "bytes": 413089
     },
     {
       "name": "embed-phone",
@@ -125,7 +125,7 @@
       "height": 932,
       "cssWidth": 1074,
       "cssHeight": 466,
-      "bytes": 186771
+      "bytes": 183577
     }
   ]
 }
